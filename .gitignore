@@ -1,0 +1,4 @@
+pyenv/*
+static/*
+*.py[co]
+db.sql*
