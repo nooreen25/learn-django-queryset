@@ -1,16 +1,21 @@
-from django.conf.urls import include, url
+from django.conf.urls import include, url, patterns
 from django.contrib import admin
+from django.conf import settings
 
-# from django.views.generic import TemplateView
-from django.views.generic.base import RedirectView
-from django.core.urlresolvers import reverse_lazy
+from queries.views import home_view, insert_view
+
 
 urlpatterns = [
     # Examples:
-    url(r'^$', RedirectView.as_view(url=reverse_lazy('admin:index'),
-        permanent=False)),
-    # url(r'^$', TemplateView.as_view(template_name='base.html'), name='home'),
     # url(r'^blog/', include('blog.urls')),
 
+    url(r'^$', home_view, name='home'),
+    url(r'^insert/$', insert_view, name='insert'),
     url(r'^admin/', include(admin.site.urls)),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += patterns('',
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    )
