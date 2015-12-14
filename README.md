@@ -15,5 +15,6 @@ class Book(models.Model):
 ####Insert
 
 * b = Book(name='The Immortals of Meluha', isbn='978123456789')
-	> No Sql query here
+
+    > No Sql query here
 
