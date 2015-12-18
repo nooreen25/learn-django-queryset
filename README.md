@@ -58,6 +58,14 @@ class Book(models.Model):
 	QUERY = u'SELECT "queries_book"."id", "queries_book"."name", "queries_book"."isbn" FROM "queries_book" WHERE "queries_book"."id" = %s LIMIT 21' - PARAMS = (u'1',)
 	```
 
+*	Book.objects.get(id=1)<br/>__*or*__ print Book.objects.get(id=1)
+
+	```
+	QUERY = u'SELECT "queries_book"."id", "queries_book"."name", "queries_book"."isbn" FROM "queries_book" WHERE "queries_book"."id" = %s' - PARAMS = (u'1',)
+	```
+
+	Note: `get` internally calls `filter` with an additional check of whether the length of queryset is one or not
+
 *   Book.objects.all[:3]<br/>__*or*__ Book.objects.all()[3:5]
 
 	```
@@ -83,7 +91,6 @@ class Book(models.Model):
 	```
 
 	Note: The query fetches __n<sup>th</sup>__(here n=6) objects from the database but while printing it will only print every __i<sup>th</sup>__(here i=2) object.
-
 
 *   print Book.objects.filter(id__in=[1])
 
