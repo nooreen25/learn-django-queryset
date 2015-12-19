@@ -52,13 +52,15 @@ class Book(models.Model):
 	QUERY = u'SELECT "queries_book"."id", "queries_book"."name", "queries_book"."isbn" FROM "queries_book" LIMIT 21' - PARAMS = ()
 	```
 
-*   print Book.objects.filter(id=1)<br/>__*or*__  print Book.objects.all().filter(id=1)
+*   print Book.objects.filter(id=1)<br/>__*or*__ print Book.objects.all().filter(id=1)<br/>__*or*__ print
+	Book.objects.filter(pk=1)<br/>__*or*__ print Book.objects.filter(id__exact=1)
 
 	```
 	QUERY = u'SELECT "queries_book"."id", "queries_book"."name", "queries_book"."isbn" FROM "queries_book" WHERE "queries_book"."id" = %s LIMIT 21' - PARAMS = (u'1',)
 	```
 
-*	Book.objects.get(id=1)<br/>__*or*__ print Book.objects.get(id=1)
+*	Book.objects.get(id=1)<br/>__*or*__ print Book.objects.get(id=1)<br/>__*or*__ Book.objects.get(pk=1)<br/>
+	__*or*__ print Book.objects.get(pk=1)<br/>__*or*__ print Book.objects.get(id__exact=1)
 
 	```
 	QUERY = u'SELECT "queries_book"."id", "queries_book"."name", "queries_book"."isbn" FROM "queries_book" WHERE "queries_book"."id" = %s' - PARAMS = (u'1',)
