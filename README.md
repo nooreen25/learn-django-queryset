@@ -100,3 +100,28 @@ class Book(models.Model):
 	QUERY = u'SELECT "queries_book"."id", "queries_book"."name", "queries_book"."isbn" FROM "queries_book" WHERE "queries_book"."id" IN (%s) LIMIT 21' - PARAMS = (u'1',)
 	```
 
+<a name='field-lookups'/>
+####Field Lookups
+
+Field lookups specify the `WHERE` clause. They remain the same for `filter`, `get` and `exclude` with the only difference in their base query structure.
+
+#####exact
+
+*	print Book.objects.filter(id__exact=1)
+
+	```
+	QUERY = u'SELECT "queries_book"."id", "queries_book"."name", "queries_book"."isbn" FROM "queries_book" WHERE "queries_book"."id" = %s LIMIT 21' - PARAMS = (u'1',)
+	```
+
+*	print Book.objects.filter(id__exact=None)
+	
+	```
+	QUERY = u'SELECT "queries_book"."id", "queries_book"."name", "queries_book"."isbn" FROM "queries_book" WHERE "queries_book"."id" IS NULL LIMIT 21' - PARAMS = ()
+	```
+
+*	print Book.objects.filter(name__iexact='tHE iMMORTALS OF mELUHA')
+
+	```
+	QUERY = u'SELECT "queries_book"."id", "queries_book"."name", "queries_book"."isbn" FROM "queries_book" WHERE "queries_book"."name" LIKE %s ESCAPE \'\\\' LIMIT 21' - PARAMS = (u"'tHE iMMORTALS OF mELUHA'",)
+	```
+
