@@ -100,6 +100,11 @@ class Book(models.Model):
 	SELECT ••• FROM `queries_book` WHERE `queries_book`.`id` IN (1) LIMIT 21
 	```
 
+*	print Book.objects.filter(id=4).filter(name__icontains='immortals')
+	```
+	SELECT ••• FROM `queries_book` WHERE (`queries_book`.`id` = 4 AND `queries_book`.`name` LIKE '%immortals%') LIMIT 21
+	```
+
 <a name='field-lookups'/>
 ####Field Lookups
 
@@ -131,3 +136,58 @@ Field lookups specify the `WHERE` clause. They remain the same for `filter`, `ge
 	SELECT ••• FROM `queries_book` WHERE `queries_book`.`name` LIKE 'tHE iMMORTALS OF mELUHA' LIMIT 21
 	```
 
+*	print Book.objects.filter(name__contains='Immortals')
+
+	```
+	SELECT ••• FROM `queries_book` WHERE `queries_book`.`name` LIKE BINARY '%Immortals%' LIMIT 21
+	```
+
+*	print Book.objects.filter(name__icontains='immortals')
+
+	```
+	SELECT ••• FROM `queries_book` WHERE `queries_book`.`name` LIKE '%immortals%' LIMIT 21
+	```
+
+*	print Book.objects.filter(id__in=[1,4,6,7])<br/>__*or*__ 
+	print Book.objects.filter(id__in=[1,4,6,7]).values_list('id')<br/>__*or*__ 
+	print Book.objects.filter(id__in=[1,4,6,7]).values_list('id', flat=True)
+
+	```
+	SELECT ••• FROM `queries_book` WHERE `queries_book`.`id` IN (1, 4, 6, 7) LIMIT 21
+	```
+
+*	u = User.objects.filter(username='admin').values_list('id', flat=True)<br/>
+	print Book.objects.filter(id__in=u)
+
+	```
+	SELECT ••• FROM `queries_book` WHERE `queries_book`.`id` IN (SELECT U0.`id` FROM `auth_user` U0 WHERE U0.`username` = 'admin') LIMIT 21
+	```
+*	u = User.objects.filter(username='admin').values_list('id', flat=True)<br/>
+	print Book.objects.filter(id__in=list(u))
+
+	```
+	SELECT ••• FROM `auth_user` WHERE `auth_user`.`username` = 'admin'
+	SELECT ••• FROM `queries_book` WHERE `queries_book`.`id` IN (1) LIMIT 21
+	```
+	Note: `list()` call around the Book Queryset to force execution of the first query. Without it, a nested query would be executed, because Querysets are lazy.
+
+*	print Book.objects.filter(id__gt=3)
+
+	```
+	SELECT ••• FROM `queries_book` WHERE `queries_book`.`id` > 3 LIMIT 21
+	```
+	Note: Similarly `>=` for __gte__, `<` for __lt__, `<=` for __lte__
+
+*	print Book.objects.filter(name__startswith='The')
+
+	```
+	SELECT ••• FROM `queries_book` WHERE `queries_book`.`name` LIKE BINARY 'The%' LIMIT 21
+	```
+
+*	print Book.objects.filter(name__istartswith='tHE')
+
+	```
+	SELECT ••• FROM `queries_book` WHERE `queries_book`.`name` LIKE 'tHE%' LIMIT 21
+	```
+
+	Note: Similarly `%The` for __endswith__, `%tHE` for __iendswith__ 
