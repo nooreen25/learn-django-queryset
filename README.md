@@ -49,21 +49,21 @@ class Book(models.Model):
 *   print Book.objects.all()<br/>__*or*__ print Book.objects.filter()
 
 	```
-	SELECT ••• FROM `queries_book` LIMIT 21
+	SELECT * FROM `queries_book` LIMIT 21
 	```
 
 *   print Book.objects.filter(id=1)<br/>__*or*__ print Book.objects.all().filter(id=1)<br/>__*or*__ print
 	Book.objects.filter(pk=1)<br/>__*or*__ print Book.objects.filter(id__exact=1)
 
 	```
-	SELECT ••• FROM `queries_book` WHERE `queries_book`.`id` = 1 LIMIT 21
+	SELECT * FROM `queries_book` WHERE `queries_book`.`id` = 1 LIMIT 21
 	```
 
 *	Book.objects.get(id=1)<br/>__*or*__ print Book.objects.get(id=1)<br/>__*or*__ Book.objects.get(pk=1)<br/>
 	__*or*__ print Book.objects.get(pk=1)<br/>__*or*__ print Book.objects.get(id__exact=1)
 
 	```
-	SELECT ••• FROM `queries_book` WHERE `queries_book`.`id` = 3
+	SELECT * FROM `queries_book` WHERE `queries_book`.`id` = 3
 	```
 
 	Note: `get` internally calls `filter` with an additional check of whether the length of queryset is one or not
@@ -77,19 +77,19 @@ class Book(models.Model):
 *	print Book.objects.all()[:3]
 
 	```
-	SELECT ••• FROM `queries_book` LIMIT 3
+	SELECT * FROM `queries_book` LIMIT 3
 	```
 
 *	print Book.objects.all()[3:5]
 
 	```
-	SELECT ••• FROM `queries_book` LIMIT 2 OFFSET 3
+	SELECT * FROM `queries_book` LIMIT 2 OFFSET 3
 	```
 
 *	Book.objects.all()[:6:2]<br/>__*or*__ print Book.objects.all()[:6:2]
 
 	```
-	SELECT ••• FROM `queries_book` LIMIT 6
+	SELECT * FROM `queries_book` LIMIT 6
 	```
 
 	Note: The query fetches __n<sup>th</sup>__(here n=6) objects from the database but while printing it will only print every __i<sup>th</sup>__(here i=2) object.
@@ -97,12 +97,12 @@ class Book(models.Model):
 *   print Book.objects.filter(id__in=[1])
 
 	```
-	SELECT ••• FROM `queries_book` WHERE `queries_book`.`id` IN (1) LIMIT 21
+	SELECT * FROM `queries_book` WHERE `queries_book`.`id` IN (1) LIMIT 21
 	```
 
 *	print Book.objects.filter(id=4).filter(name__icontains='immortals')
 	```
-	SELECT ••• FROM `queries_book` WHERE (`queries_book`.`id` = 4 AND `queries_book`.`name` LIKE '%immortals%') LIMIT 21
+	SELECT * FROM `queries_book` WHERE (`queries_book`.`id` = 4 AND `queries_book`.`name` LIKE '%immortals%') LIMIT 21
 	```
 
 <a name='field-lookups'/>
@@ -127,25 +127,25 @@ Field lookups specify the `WHERE` clause. They remain the same for `filter`, `ge
 *	print Book.objects.filter(name__exact='tHE iMMORTALS OF mELUHA')
 
 	```
-	SELECT ••• FROM `queries_book` WHERE `queries_book`.`name` = 'tHE iMMORTALS OF mELUHA' LIMIT 21
+	SELECT * FROM `queries_book` WHERE `queries_book`.`name` = 'tHE iMMORTALS OF mELUHA' LIMIT 21
 	```
 
 *	print Book.objects.filter(name__iexact='tHE iMMORTALS OF mELUHA')
 
 	```
-	SELECT ••• FROM `queries_book` WHERE `queries_book`.`name` LIKE 'tHE iMMORTALS OF mELUHA' LIMIT 21
+	SELECT * FROM `queries_book` WHERE `queries_book`.`name` LIKE 'tHE iMMORTALS OF mELUHA' LIMIT 21
 	```
 
 *	print Book.objects.filter(name__contains='Immortals')
 
 	```
-	SELECT ••• FROM `queries_book` WHERE `queries_book`.`name` LIKE BINARY '%Immortals%' LIMIT 21
+	SELECT * FROM `queries_book` WHERE `queries_book`.`name` LIKE BINARY '%Immortals%' LIMIT 21
 	```
 
 *	print Book.objects.filter(name__icontains='immortals')
 
 	```
-	SELECT ••• FROM `queries_book` WHERE `queries_book`.`name` LIKE '%immortals%' LIMIT 21
+	SELECT * FROM `queries_book` WHERE `queries_book`.`name` LIKE '%immortals%' LIMIT 21
 	```
 
 *	print Book.objects.filter(id__in=[1,4,6,7])<br/>__*or*__ 
@@ -153,41 +153,41 @@ Field lookups specify the `WHERE` clause. They remain the same for `filter`, `ge
 	print Book.objects.filter(id__in=[1,4,6,7]).values_list('id', flat=True)
 
 	```
-	SELECT ••• FROM `queries_book` WHERE `queries_book`.`id` IN (1, 4, 6, 7) LIMIT 21
+	SELECT * FROM `queries_book` WHERE `queries_book`.`id` IN (1, 4, 6, 7) LIMIT 21
 	```
 
 *	u = User.objects.filter(username='admin').values_list('id', flat=True)<br/>
 	print Book.objects.filter(id__in=u)
 
 	```
-	SELECT ••• FROM `queries_book` WHERE `queries_book`.`id` IN (SELECT U0.`id` FROM `auth_user` U0 WHERE U0.`username` = 'admin') LIMIT 21
+	SELECT * FROM `queries_book` WHERE `queries_book`.`id` IN (SELECT U0.`id` FROM `auth_user` U0 WHERE U0.`username` = 'admin') LIMIT 21
 	```
 *	u = User.objects.filter(username='admin').values_list('id', flat=True)<br/>
 	print Book.objects.filter(id__in=list(u))
 
 	```
-	SELECT ••• FROM `auth_user` WHERE `auth_user`.`username` = 'admin'
-	SELECT ••• FROM `queries_book` WHERE `queries_book`.`id` IN (1) LIMIT 21
+	SELECT * FROM `auth_user` WHERE `auth_user`.`username` = 'admin'
+	SELECT * FROM `queries_book` WHERE `queries_book`.`id` IN (1) LIMIT 21
 	```
 	Note: `list()` call around the Book Queryset to force execution of the first query. Without it, a nested query would be executed, because Querysets are lazy.
 
 *	print Book.objects.filter(id__gt=3)
 
 	```
-	SELECT ••• FROM `queries_book` WHERE `queries_book`.`id` > 3 LIMIT 21
+	SELECT * FROM `queries_book` WHERE `queries_book`.`id` > 3 LIMIT 21
 	```
 	Note: Similarly `>=` for __gte__, `<` for __lt__, `<=` for __lte__
 
 *	print Book.objects.filter(name__startswith='The')
 
 	```
-	SELECT ••• FROM `queries_book` WHERE `queries_book`.`name` LIKE BINARY 'The%' LIMIT 21
+	SELECT * FROM `queries_book` WHERE `queries_book`.`name` LIKE BINARY 'The%' LIMIT 21
 	```
 
 *	print Book.objects.filter(name__istartswith='tHE')
 
 	```
-	SELECT ••• FROM `queries_book` WHERE `queries_book`.`name` LIKE 'tHE%' LIMIT 21
+	SELECT * FROM `queries_book` WHERE `queries_book`.`name` LIKE 'tHE%' LIMIT 21
 	```
 
 	Note: Similarly `%The` for __endswith__, `%tHE` for __iendswith__ 
