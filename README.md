@@ -191,3 +191,10 @@ Field lookups specify the `WHERE` clause. They remain the same for `filter`, `ge
 	```
 
 	Note: Similarly `%The` for __endswith__, `%tHE` for __iendswith__ 
+
+*	start_date, end_date = datetime.date(2015, 12, 21), datetime.date(2015, 12, 23)
+	print Book.objects.filter(created_at__range=(start_date, end_date))
+
+	```
+	SELECT * FROM `queries_book` WHERE `queries_book`.`created_at` BETWEEN '2015-12-21 00:00:00' AND '2015-12-23 00:00:00' LIMIT 21
+	```
